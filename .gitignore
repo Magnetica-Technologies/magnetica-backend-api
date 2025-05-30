@@ -1,0 +1,66 @@
+# Magnetica VDE Platform - Enterprise .gitignore
+
+# 🚫 LARGE ASSETS (SOT - Source of Truth)
+SOT/
+data/images/mohd_images_consolidated/
+*.suck
+*.suck.log
+
+# 🚫 NODE.JS
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# 🚫 ENVIRONMENT & SECRETS
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+config/secrets/
+
+# 🚫 PYTHON
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# 🚫 DATABASES
+*.db
+*.sqlite
+*.sqlite3
+governance.db
+vde_platform_demo.db
+
+# 🚫 LOGS & TEMP
+logs/
+*.log
+temp/
+tmp/
+.DS_Store
+.pytest_cache/
+
+# 🚫 IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 🚫 BUILD OUTPUTS
+dist/
+build/
+coverage/
+
+# ✅ KEEP CRITICAL CONFIG
+!.cursorrules
+!package.json
+!requirements.txt
+!README.md
+!GOVERNANCE/ 

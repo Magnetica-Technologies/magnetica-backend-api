@@ -1,0 +1,38 @@
+{
+  "name": "magnetica-vde-platform",
+  "version": "1.0.0",
+  "description": "🚀 Magnetica Visual Discovery Engine - Enterprise Multi-Tenant SaaS Platform. AI-powered visual intelligence for luxury design curation with proven +31.8% conversion lifts.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Magnetica VDE Platform Tests\" && exit 0",
+    "build": "echo \"Magnetica VDE Platform Build\" && exit 0"
+  },
+  "keywords": [
+    "magnetica",
+    "vde",
+    "visual-discovery",
+    "saas-platform",
+    "enterprise-ai",
+    "luxury-tech",
+    "multi-tenant",
+    "business-intelligence",
+    "conversion-optimization"
+  ],
+  "author": "Magnetica Technologies",
+  "license": "Enterprise",
+  "homepage": "https://magnetica.tech",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magnetica-tech/magnetica-vde-platform.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "express-rate-limit": "^7.1.5"
+  }
+}

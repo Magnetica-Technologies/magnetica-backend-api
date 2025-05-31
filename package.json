@@ -2,11 +2,11 @@
   "name": "magnetica-vde-platform",
   "version": "1.0.0",
   "description": "Magnetica Visual Discovery Engine - Enterprise Backend API",
-  "main": "server-simple.js",
+  "main": "server.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node server-simple.js",
-    "dev": "node server-simple.js",
+    "start": "node server.js",
+    "dev": "node server.js",
     "build": "echo 'Build complete'",
     "vercel-build": "echo 'Vercel build complete'",
     "setup-keys": "node scripts/setup-api-keys.js"
@@ -31,7 +31,8 @@
   "dependencies": {
     "cors": "2.8.5",
     "dotenv": "16.4.1",
-    "express": "4.19.2"
+    "express": "4.19.2",
+    "express-rate-limit": "^7.1.5"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -1,12 +1,10 @@
 {
   "version": 2,
+  "name": "magnetica-vde-platform",
   "builds": [
     {
       "src": "server.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxLambdaSize": "50mb"
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [

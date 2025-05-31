@@ -63,4 +63,24 @@ coverage/
 !package.json
 !requirements.txt
 !README.md
-!GOVERNANCE/ 
+!GOVERNANCE/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+/build
+/dist
+.next/
+
+# Environment variables - PROTETTO: API KEYS
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local 

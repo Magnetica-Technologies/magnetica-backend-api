@@ -1,6 +1,10 @@
 // ENTERPRISE MOCK SERVER: Production-Grade Information Layer Service
 // Fixed all critical security and validation issues
 
+// 🔐 MAGNETICA API KEYS MANAGER - CARICAMENTO AUTOMATICO CREDENZIALI
+const MagneticaAPIKeysManager = require('./config/api-keys-manager');
+const apiKeysManager = new MagneticaAPIKeysManager();
+
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
@@ -516,7 +520,98 @@ class EnterpriseInformationLayerService {
 // Initialize enterprise service
 const informationService = new EnterpriseInformationLayerService();
 
-// ENTERPRISE API ENDPOINTS
+// ===============================
+// 🔐 API KEYS MANAGEMENT ENDPOINTS
+// ===============================
+
+// Configuration status endpoint
+app.get('/api/v1/config/status', (req, res) => {
+  try {
+    const status = apiKeysManager.getConfigurationStatus();
+    
+    res.json({
+      success: true,
+      data: {
+        configuration: status,
+        systemHealth: {
+          apiKeysManager: apiKeysManager.isInitialized,
+          informationService: informationService.isInitialized,
+          environment: process.env.NODE_ENV || 'development'
+        },
+        costs: apiKeysManager.getCostLimits(),
+        features: {
+          demoMode: process.env.ENABLE_DEMO_MODE === 'true',
+          costTracking: process.env.ENABLE_COST_TRACKING === 'true',
+          rateLimiting: process.env.ENABLE_RATE_LIMITING === 'true'
+        }
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve configuration status',
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// API Keys validation endpoint
+app.get('/api/v1/config/validate-keys', async (req, res) => {
+  try {
+    const validationResults = await apiKeysManager.validateAPIKeys();
+    
+    res.json({
+      success: true,
+      data: {
+        validation: validationResults,
+        summary: {
+          totalKeys: Object.keys(validationResults).length,
+          validKeys: Object.values(validationResults).filter(r => r.valid).length,
+          systemReady: apiKeysManager.isInitialized
+        }
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'API keys validation failed',
+      details: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// OpenAI configuration endpoint
+app.get('/api/v1/config/openai', (req, res) => {
+  try {
+    const config = apiKeysManager.getOpenAIConfig();
+    
+    // Don't expose the actual API key - only configuration status
+    res.json({
+      success: true,
+      data: {
+        configured: !!config.apiKey && !config.apiKey.includes('your-'),
+        model: config.model,
+        maxTokens: config.maxTokens,
+        hasOrganization: !!config.organization,
+        status: config.apiKey && config.apiKey.startsWith('sk-') ? 'valid_format' : 'invalid_format'
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve OpenAI configuration',
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// ===============================
+// 🧪 DEMO & BUSINESS ENDPOINTS
+// ===============================
 
 // Health check with enterprise metrics
 app.get('/health', (req, res) => {
@@ -740,14 +835,34 @@ app.listen(PORT, () => {
   console.log(`✅ Input Validation: STRICT`);
   console.log(`🛡️  Rate Limiting: ENABLED`);
   console.log(`🔐 CORS: SECURE`);
+  
+  // 🔐 Mostra report configurazione API key
+  apiKeysManager.generateConfigurationReport();
+  
   console.log(`🧪 Demo endpoints:`);
   console.log(`   - GET /api/v1/demo`);
   console.log(`   - POST /api/v1/segment/classify (VALIDATED)`);
   console.log(`   - GET /api/v1/mohd/config`);
   console.log(`   - GET /api/v1/session-analytics`);
   console.log(`   - GET /api/v1/user-profile/:sessionId`);
+  
+  console.log(`🔐 Configuration endpoints:`);
+  console.log(`   - GET /api/v1/config/status`);
+  console.log(`   - GET /api/v1/config/validate-keys`);
+  console.log(`   - GET /api/v1/config/openai`);
+  
   console.log('✅ Ready for enterprise demo!');
   console.log('🔥 ALL CRITICAL SECURITY ISSUES FIXED!');
+  
+  // Avviso sulla configurazione
+  const status = apiKeysManager.getConfigurationStatus();
+  if (!status.isConfigured) {
+    console.log('\n⚠️  ATTENZIONE: Alcune API key non sono configurate');
+    console.log('📝 Configura il file .env per abilitare tutte le funzionalità');
+    console.log('🔗 Visita: /api/v1/config/status per dettagli\n');
+  } else {
+    console.log('\n✅ Tutte le API key sono configurate correttamente!\n');
+  }
 });
 
 module.exports = app; 
